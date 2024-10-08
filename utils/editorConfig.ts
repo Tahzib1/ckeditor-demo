@@ -65,6 +65,12 @@ import {
   Undo,
   HeadingOption,
   LinkDecoratorDefinition,
+  BlockQuote,
+  CKBox,
+  CKBoxImageEdit,
+  Highlight,
+  Image,
+  MediaEmbed,
 } from "ckeditor5";
 import {
   AIAssistant,
@@ -86,15 +92,22 @@ import {
   RevisionHistory,
   TrackChanges,
   TrackChangesData,
+  PresenceList,
+  RealTimeCollaborativeComments,
+  RealTimeCollaborativeRevisionHistory,
+  RealTimeCollaborativeEditing,
+  RealTimeCollaborativeTrackChanges,
 } from "ckeditor5-premium-features";
+import { setupChannelId } from "./setupChannelId";
 
-import { CommentsIntegration } from "@/lib/ckeditor/adapters/comments-adapter-plugin";
-import { RevisionHistoryIntegration } from "@/lib/ckeditor/adapters/revision-history-adapter-plugin";
-import { TrackChangesIntegration } from "@/lib/ckeditor/adapters/track-changes-adapter-plugin";
-import { UsersInit } from "@/lib/ckeditor/users/users-init-plugin";
-
-const LICENSE_KEY =
-  "b3h3a2RWYjlMUjJJcHFPMGlyeDZHQm1tVVVaS3BxQzI4U0JYMWxPVEdyRm42TG9GdzlOWjIvS01nSUFFaFE9PS1NakF5TkRFd01qYz0=";
+const LICENSE_KEY = process.env.NEXT_PUBLIC_LICENSE_KEY;
+const CLOUD_SERVICES_TOKEN_URL =
+  process.env.NEXT_PUBLIC_CLOUD_SERVICES_TOKEN_URL;
+const CLOUD_SERVICES_WEBSOCKET_URL =
+  process.env.NEXT_PUBLIC_CLOUD_SERVICES_WEBSOCKET_URL;
+const CKBOX_TOKEN_URL = undefined;
+const AI_API_URL = process.env.NEXT_PUBLIC_AI_API_URL;
+const AI_AUTH_TOKEN = "Bearer " + process.env.NEXT_PUBLIC_AI_AUTH_TOKEN;
 
 /**
  * The `DocumentOutlineToggler` plugin adds an icon to the left side of the editor.
@@ -183,6 +196,7 @@ export const editorConfig = {
       "aiAssistant",
       "|",
       "formatPainter",
+      "insertTemplate",
       "|",
       "heading",
       "|",
@@ -292,28 +306,39 @@ export const editorConfig = {
     RevisionHistory,
     TrackChanges,
     TrackChangesData,
+    BlockQuote,
+    CKBox,
+    CKBoxImageEdit,
+    Highlight,
+    Image,
+    MediaEmbed,
 
-    CommentsIntegration,
-    RevisionHistoryIntegration,
-    TrackChangesIntegration,
-    UsersInit,
+    Comments,
+    PresenceList,
+    RealTimeCollaborativeComments,
+    RealTimeCollaborativeEditing,
+    RealTimeCollaborativeRevisionHistory,
+    RealTimeCollaborativeTrackChanges,
+    RevisionHistory,
+    TrackChanges,
+    TrackChangesData,
   ],
   extraPlugins: [DocumentOutlineToggler],
-  // ai: {
-  //   openAI: {
-  //     apiUrl: AI_API_URL,
-  //     requestHeaders: {
-  //       Authorization: AI_AUTH_TOKEN,
-  //     },
-  //     requestParameters: {
-  //       model: "gpt-3.5-turbo-1106",
-  //       max_tokens: 4000,
-  //     },
-  //   },
-  //   aiAssistant: {
-  //     contentAreaCssClass: "formatted",
-  //   },
-  // },
+  ai: {
+    openAI: {
+      apiUrl: AI_API_URL,
+      requestHeaders: {
+        Authorization: AI_AUTH_TOKEN,
+      },
+      requestParameters: {
+        model: "gpt-4o-mini",
+        max_tokens: 4000,
+      },
+    },
+    aiAssistant: {
+      contentAreaCssClass: "formatted",
+    },
+  },
   balloonToolbar: [
     "aiAssistant",
     "|",
@@ -378,6 +403,9 @@ export const editorConfig = {
     options: [10, 12, 14, "default", 18, 20, 22],
     supportAllValues: true,
   },
+  mediaEmbed: {
+    toolbar: ["comment"],
+  },
   heading: {
     options: [
       {
@@ -440,6 +468,17 @@ export const editorConfig = {
   },
   initialData: "",
   licenseKey: LICENSE_KEY,
+  cloudServices: {
+    tokenUrl: CLOUD_SERVICES_TOKEN_URL,
+    webSocketUrl: CLOUD_SERVICES_WEBSOCKET_URL,
+  },
+  collaboration: {
+    channelId: setupChannelId(),
+  },
+  ckbox: {
+    tokenUrl: CKBOX_TOKEN_URL || CLOUD_SERVICES_TOKEN_URL,
+  },
+
   link: {
     addTargetToExternalLinks: true,
     defaultProtocol: "https://",

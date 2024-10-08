@@ -1,5 +1,5 @@
 export type Document = {
-  id: number;
+  id: string;
   name: string;
   contents: string;
   dateCreated?: Date;

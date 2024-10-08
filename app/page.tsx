@@ -1,6 +1,7 @@
 "use client";
 
 import { Document } from "@/types/document";
+import { setupChannelId } from "@/utils/setupChannelId";
 import Link from "next/link";
 import { ChangeEvent, useEffect, useState } from "react";
 
@@ -9,18 +10,11 @@ export default function Home() {
   const [isCreatingNewDocument, setIsCreatingNewDocument] = useState(false);
   const [newDocumentName, setNewDocumentName] = useState("");
 
-  const sampleDocuments: Array<Document> = [1, 2, 3].map((id) => ({
-    id,
-    name: `Sample Document ${id}`,
-    contents: "",
-    dateCreated: new Date(),
-  }));
-
   useEffect(() => {
     const savedDocuments = JSON.parse(
       localStorage.getItem("documents") ?? "[]"
     );
-    setDocuments([...savedDocuments, ...sampleDocuments]);
+    setDocuments([...savedDocuments]);
   }, []);
 
   const handleNewDocumentClicked = () => {
@@ -48,14 +42,14 @@ export default function Home() {
       localStorage.getItem("documents") ?? "[]"
     );
     const newDocument: Document = {
-      id: Math.floor(10000 + Math.random() * 90000),
+      id: setupChannelId(),
       name,
       contents: "",
       dateCreated: new Date(),
     };
 
     const documents: Array<Document> = [newDocument, ...savedDocuments];
-    setDocuments([...documents, ...sampleDocuments]);
+    setDocuments([...documents]);
     localStorage.setItem("documents", JSON.stringify(documents));
   };
 
@@ -89,6 +83,11 @@ export default function Home() {
           )}
         </div>
       </div>
+      {documents.length <= 0 && (
+        <p className="text-center mt-24 text-gray-500 italic">
+          No documents available
+        </p>
+      )}
       <ul className="list-none mt-8 grid-cols-3  grid gap-4">
         {documents.map((doc) => (
           <li
@@ -110,13 +109,14 @@ export default function Home() {
         ))}
       </ul>
 
-      <div className=" mt-24">
+      <div className=" my-24">
         <h2 className="text-xl font-bold">Features</h2>
         <article className="prose prose-slate">
           <ul>
             <li>Create & Edit Documents</li>
             <li>Autosave Documents</li>
             <li>Slash Commands</li>
+            <li>Realtime collaboration</li>
             <li>AI Suggestions</li>
             <li>Document Outline</li>
             <li>Export to PDF/Word</li>

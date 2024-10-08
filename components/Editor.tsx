@@ -33,8 +33,6 @@ function Editor() {
         config={{
           plugins: [Essentials, Bold, Italic, Paragraph, SlashCommand, Mention],
           toolbar: ["undo", "redo", "|", "bold", "italic"],
-          licenseKey:
-            "b3h3a2RWYjlMUjJJcHFPMGlyeDZHQm1tVVVaS3BxQzI4U0JYMWxPVEdyRm42TG9GdzlOWjIvS01nSUFFaFE9PS1NakF5TkRFd01qYz0=",
         }}
         data="<p>Hello from the first editor working with the context!</p>"
         contextItemMetadata={{

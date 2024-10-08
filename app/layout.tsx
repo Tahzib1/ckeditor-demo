@@ -33,7 +33,7 @@ export default function RootLayout({
         <nav className=" border-b-slate-100 m-4 flex justify-center">
           <h6 className="p-2 text-2xl text-gray-700 hover:bg-slate-100 font-semibold flex gap-2">
             <Image
-              src="ckeditor-2.svg"
+              src="/ckeditor-2.svg"
               alt="ckeditor logo"
               width={24}
               height={24}
