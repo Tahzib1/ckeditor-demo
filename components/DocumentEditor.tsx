@@ -204,7 +204,7 @@ export default function DocumentEditor({ documentId }: DocumentEditorProps) {
           className="editor-container editor-container_document-editor editor-container_include-outline editor-container_include-annotations block"
           ref={editorContainerRef}
         >
-          <div className="sticky top-0">
+          <div className="sticky top-0 z-10">
             <div
               className="editor-container__menu-bar"
               ref={editorMenuBarRef}
